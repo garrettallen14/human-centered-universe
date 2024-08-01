@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books I Recommend - Human Centered Universe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Wittgenstein:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .book-section {
+            margin-bottom: 2em;
+        }
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5em;
+        }
+        .book {
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            padding: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .book:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .book-thumbnail {
+            width: 100%;
+            height: 200px;
+            background-color: #e0e0e0;
+            margin-bottom: 1em;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 0.8em;
+        }
+        .book h3 {
+            font-size: 1.1em;
+            margin-bottom: 0.5em;
+        }
+        .book p {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .book a {
+            color: #333;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .book a:hover {
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <header>
+            <h1>Human Centered Universe</h1>
+        </header>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="bookshelf.html">Bookshelf</a>
+        </nav>
+        <main id="content">
+            <h2>Books I Recommend</h2>
+            
+            <section class="book-section">
+                <h3>Machine Learning</h3>
+                <div class="book-grid">
+                    <div class="book">
+                        <div class="book-thumbnail">Book Cover</div>
+                        <h3><a href="#">Neural Networks and Numerical Analysis</a></h3>
+                        <p>Cool book for deep learning intuition building.</p>
+                    </div>
+                    
+                    <div class="book">
+                        <div class="book-thumbnail">Book Cover</div>
+                        <h3><a href="#">Understanding Deep Learning</a></h3>
+                        <p>Read this whole book, cover to cover, if you are just starting out in ML!</p>
+                    </div>
+                    
+                    <div class="book">
+                        <div class="book-thumbnail">Book Cover</div>
+                        <h3><a href="#">High-Dimensional Probability</a></h3>
+                        <p>Cool book, not incredible but chapters 3, 5, and X have some good intuition alpha on random vectors.</p>
+                    </div>
+                    
+                    <div class="book">
+                        <div class="book-thumbnail">Book Cover</div>
+                        <h3><a href="#">Programming Massively Parallel Processors</a></h3>
+                        <p>Great introduction to CUDA programming.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="book-section">
+                <h3>Pure Math</h3>
+                <div class="book-grid">
+                    <div class="book">
+                        <div class="book-thumbnail">Book Cover</div>
+                        <h3><a href="#">Algebra - Artin</a></h3>
+                        <p>My Abstract Algebra class book. Has a special place in my heart for all the pain / suffering I endured reading this.</p>
+                    </div>
+                    
+                    <div class="book">
+                        <div class="book-thumbnail">Book Cover</div>
+                        <h3><a href="#">Topology - Munkres</a></h3>
+                        <p>This was my favorite class in school.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="book-section">
+                <h3>Applied Math</h3>
+                <div class="book-grid">
+                    <div class="book">
+                        <div class="book-thumbnail">Book Cover</div>
+                        <h3><a href="#">Arbitrage Theory in Continuous Time</a></h3>
+                        <p>Cool combination of measure theory, probability theory, and financial markets.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

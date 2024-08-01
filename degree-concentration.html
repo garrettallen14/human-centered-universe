@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Degree Concentration in Dense Random Graphs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Wittgenstein:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        #graph, #distribution {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #60168a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #4a1269;
+        }
+        input {
+            margin-right: 10px;
+            padding: 5px;
+        }
+        .math {
+            font-family: "Times New Roman", Times, serif;
+            font-style: italic;
+        }
+        .proof-step {
+            margin-bottom: 10px;
+            padding: 1px 10px; /* Reduced vertical padding */
+            background-color: #f9f9f9;
+            border-left: 5px solid #60168a;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .slider-container label {
+            width: 200px;
+        }
+        .slider-container input {
+            flex-grow: 1;
+        }
+        .slider-value {
+            width: 50px;
+            text-align: right;
+            margin-left: 10px;
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 75%;
+            height: 15px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #60168a;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #60168a;
+            cursor: pointer;
+        }
+
+        #graph svg, #distribution svg {
+            display: block;
+            margin: auto;
+        }
+        #density-warning {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <header>
+            <h1>Human Centered Universe</h1>
+        </header>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="bookshelf.html">Bookshelf</a>
+        </nav>
+        <main id="content">
+            <article class="full-article">
+                <h2>Degree Concentration in Dense Random Graphs</h2>
+                <div class="date">31 Jul 2024</div>
+
+                <section id="visualization">
+                    <h3>Visualization</h3>
+                    <div class="slider-container">
+                        <label for="C">Constant C:</label>
+                        <input type="range" id="C" min="1" max="20" value="10">
+                        <span id="C-value" class="slider-value">10</span>
+                    </div>
+                    <div class="slider-container">
+                        <label for="n">Number of vertices (n):</label>
+                        <input type="range" id="n" min="40" max="200" value="100">
+                        <span id="n-value" class="slider-value">100</span>
+                    </div>
+                    <div class="slider-container">
+                        <label for="p">Edge probability (p):</label>
+                        <input type="range" id="p" min="0" max="1" step="0.01" value="0.75">
+                        <span id="p-value" class="slider-value">0.75</span>
+                    </div>
+                    <div id="density-warning"></div>
+                    <button id="generate">Generate New Graph</button>
+
+                    <h4>Random Graph</h4>
+                    <div id="graph"></div>
+
+                    <h4>Degree Distribution</h4>
+                    <div id="distribution"></div>
+                    <p class="image-caption">Description: The Degree Distribution graph illustrates the distribution of vertex degrees in the generated random graph shown above. The red dotted line displays the expected degree for each vertex. The shaded area highlights the range within 10% of the expected degree. The theoretical probability for a single vertex to have a degree within this range is calculated based on the proposition proved below. (Note: the graph must be dense, so there is a restriction on n and p)</p>
+                </section>
+
+                <section id="article-body">
+                    <h2>Introduction</h2>
+                
+                    <p>Inspired by <a href="https://x.com/tszzl/status/1817636331767661014" style="text-decoration: dotted-underline; color: black;">some</a> <a href="https://x.com/tszzl/status/1817108910299291712" style="text-decoration: dotted-underline; color: black;">recent</a> <a href="https://x.com/tszzl/status/1817081479190708528" style="text-decoration: dotted-underline; color: black;">roon</a> <a href="https://x.com/_deepfates/status/1817798524148609486" style="text-decoration: dotted-underline; color: black;">tweets</a> , I have begun studying <a href="https://www.math.uci.edu/~rvershyn/papers/HDP-book/HDP-book.html" style="text-decoration: dotted-underline; color: black;">"High-Dimensional Probability"</a> by Roman Vershynin to gain a deeper intuition about higher-dimensional spaces. I encountered a cool proof which I wanted to visualize, so I decided to make a blog post showcasing the graphs and what I learned. The result provides some insights into the structure of large, complex networks. This is not really a machine learning oriented result, but still thought I would share.</p>
+
+                    <h2>The Erdős-Rényi Model</h2>
+                
+                    <p>The proposition concerns the <a href="https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model" style="text-decoration: dotted-underline; color: black;">Erdős-Rényi random graph model</a>, G(n,p).</p>
+                    <p>G ~ G(n,p) is a graph where:</p>
+                    <ul>
+                        <li>n is the number of vertices</li>
+                        <li>p is the probability of an edge between any two vertices</li>
+                        <li>d = (n-1)p is the expected degree of each vertex</li>
+                    </ul>
+                
+                    <p>The interactive visualization above allows you to experiment with different values of n and p. We restrict visualization to dense graphs, ensuring the result holds.</p>
+                
+                    <h2>Proof</h2>
+                    <div class="proof-step">
+                        <h3>Proposition: (Dense graphs are almost regular)</h3>
+                        <h4>There is an absolute constant C such that the following holds. Consider a random graph G ~ G(n, p) with
+                        expected degree satisfying d ≥ C log n. Then, with high probability (for example, 0.9), the following occurs: all vertices of G have degrees between 0.9d and 1.1d.</h4>
+                    </div>
+                    <div class="proof-step">
+                        <p><u>Proof:</u></p>
+                        <p>A degree is defined as the number of vertices connected to a given vertex. We want to prove that in dense random graphs, the degrees of all vertices are concentrated around the expected degree.</p>
+                        <p><strong>Goal: We aim to show that ℙ(∀i ≤ n : 0.9d ≤ d<sub>i</sub> ≤ 1.1d) ≥ 0.9, where d<sub>i</sub> is the degree of vertex i.</strong></p>
+                        <p><u>Intuition:</u> The question is: how likely is it that every single vertex in our random graph has a degree within 10% of the expected degree? If we can show this probability is high (in our example, 90%), we can conclude that the degrees in dense graphs are very tightly concentrated around the expected degree value.</p>
+                    </div>
+                    <div class="proof-step">
+                        <p>We begin by first applying <a href="https://en.wikipedia.org/wiki/Concentration_inequality#Chernoff_bounds" style="text-decoration: dotted-underline; color: black;">Chernoff's inequality</a> to a single vertex:</p>
+                        <p><strong>Given a vertex i with degree d<sub>i</sub>, we have: ℙ(|d<sub>i</sub> - d| ≥ 0.1d) ≤ 2e<sup>-cd</sup>, where c is some positive constant.</strong></p>
+                        <p><u>Intuition:</u> Chernoff's inequality is a powerful tool for bounding probabilities of large deviations in sums of independent random variables. In our graph, each potential edge is like an independent coin flip (not 50:50, but p:(1-p)). The inequality essentially tells us how unlikely it is for any single vertex to have a degree that strays far from the expected value. Due to the exponential term, this probability becomes smaller as the dimension (and consequently, the expected degree) increases.</p>
+                    </div>
+                    <div class="proof-step">
+                        <p>We now extend our result to all vertices using the <a href="https://en.wikipedia.org/wiki/Boole%27s_inequality" style="text-decoration: dotted-underline; color: black;">union bound</a>. We now have:</p>
+                        <p><strong>ℙ(∃i ≤ n : |d<sub>i</sub> - d| ≥ 0.1d) ≤ n · 2e<sup>-cd</sup></strong></p>
+                        <p><u>Intuition:</u> Via the results from the union bound, we now can consider all vertices simultaneously. The union bound is a conservative estimate, essentially saying: "The probability of this unlikely event happening to any vertex is at most the sum of the probabilities for each individual vertex." Even with this overestimation, we'll see that for dense enough graphs, this probability is still quite small!</p>
+                    </div>
+                    <div class="proof-step">
+                        <p>Now we can determine the density condition necessary for our result to hold with high probability:</p>
+                        <p><strong>We want n · 2e<sup>-cd</sup> ≤ 0.1, which leads to the condition d ≥ C log n.</strong></p>
+                        <p><u>Intuition:</u> This step reveals how dense our graph needs to be for our result to hold with high probability. The logarithmic relationship with n is cool: as our graph grows larger, it doesn't need to become proportionally denser for this property to hold!</p>
+                    </div>
+                    <div class="proof-step">
+                        <p>Next, we simply translate the inequality into a probability statement:</p>
+                        <p><strong>ℙ(∀i ≤ n : |d<sub>i</sub> - d| < 0.1d) ≥ 1 - n · 2e<sup>-cd</sup> ≥ 0.9</strong></p>
+                        <p><u>Intuition:</u> Here, we flip from the probability of at least one vertex deviating significantly, to considering the probability that all vertices stay close to the expected degree. This step shows that when our graph is sufficiently dense (d ≥ C log n), this "all vertices behave well" event happens with high probability (at least 0.9)!</p>
+                    </div>
+                    <div class="proof-step">
+                        <p>Main result:</p>
+                        <p><strong>There exists some C such that when d ≥ C log n, with probability at least 0.9, all vertices have degrees between 0.9d and 1.1d.
+                        </strong></p>
+                        <p><u>Intuition:</u> This is a powerful statement about the structure of dense random graphs. Despite the randomness in their construction, these graphs exhibit a striking regularity: with high probability, every single vertex has a degree very close to the expected degree. This emergent order from randomness is a fascinating aspect of large, complex networks.</p>
+                    </div>
+                    <p>Through simply combining Chernoff's inequality and the union bound, we get some pretty profound insights about the structure of random graphs. The result suggests that in sufficiently dense random networks, we can expect a high degree of uniformity, a property that could have significant implications for the behavior and analysis of such networks in various fields.</p>
+                
+                    <h2>Implications and Further Thoughts</h2>
+
+                    <p>I wasn't quite sure where exactly this is applied, so I got Claude to generate some ways this proof is applied in real life. I will leave you with these:</p>
+                
+                    <ol>
+                        <li><strong>Network Analysis:</strong> This result suggests that in large, dense networks, we might expect to see a remarkably uniform degree distribution. Significant deviations from this could indicate non-random structure in real-world networks.</li>
+                        <li><strong>Algorithm Design:</strong> Understanding the expected structure of random graphs can inform the design of algorithms for network analysis and graph problems. The high probability of a very regular structure in dense random graphs could be exploited for more efficient algorithms.</li>
+                        <li><strong>High-Dimensional Spaces:</strong> This concentration phenomenon is reminiscent of other surprising properties that emerge in high-dimensional spaces, such as the concentration of measure. As machine learning often deals with high-dimensional data, understanding these counterintuitive properties can provide valuable insights into the behavior of our models and data.</li>
+                        <li><strong>Limitations:</strong> It's important to note that this result applies to dense graphs. For sparse graphs (where d = o(log n)), different behaviors emerge, as explored in the exercises following this theorem in Vershynin's book.</li>
+                    </ol>
+                </section>
+        </main>
+    </div>
+    <script>
+        const width = 800;
+        const height = 400;
+        let C = 10; // Initial value for C
+        
+        function updateCSlider() {
+            C = parseInt(document.getElementById("C").value);
+            document.getElementById("C-value").textContent = C;
+            updatePSlider();
+        }
+
+        function updatePSlider() {
+            const n = parseInt(document.getElementById("n").value);
+            const pSlider = document.getElementById("p");
+            const minP = (C * Math.log(n)) / (n - 1);
+            pSlider.min = minP.toFixed(4);
+            pSlider.max = "1";
+            pSlider.step = Math.max(0.0001, (1 - minP) / 100).toFixed(4);
+            if (parseFloat(pSlider.value) < minP) {
+                pSlider.value = minP.toFixed(4);
+            }
+            document.getElementById("p-value").textContent = pSlider.value;
+            checkDensityCondition();
+        }
+        
+        function checkDensityCondition() {
+            const n = parseInt(document.getElementById("n").value);
+            const p = parseFloat(document.getElementById("p").value);
+            const d = (n - 1) * p;
+            const minD = C * Math.log(n);
+            const warningElement = document.getElementById("density-warning");
+            
+            if (d < minD) {
+                warningElement.textContent = "Warning: Graph may not be dense enough for the concentration property to hold.";
+            } else {
+                warningElement.textContent = "";
+            }
+        }
+
+        document.getElementById("C").addEventListener("input", updateCSlider);
+        
+        document.getElementById("n").addEventListener("input", function() {
+            document.getElementById("n-value").textContent = this.value;
+            updatePSlider();
+            generate();
+        });
+        
+        document.getElementById("p").addEventListener("input", function() {
+            document.getElementById("p-value").textContent = this.value;
+            checkDensityCondition();
+            generate();
+        });
+        
+        function generateGraph(n, p) {
+            const nodes = Array.from({length: n}, (_, i) => ({id: i}));
+            const links = [];
+            for (let i = 0; i < n; i++) {
+                for (let j = i + 1; j < n; j++) {
+                    if (Math.random() < p) {
+                        links.push({source: i, target: j});
+                    }
+                }
+            }
+            return {nodes, links};
+        }
+        
+        function drawGraph(graph) {
+            d3.select("#graph").selectAll("*").remove();
+        
+            const margin = {top: 20, right: 75, bottom: 20, left: 50};
+            const graphWidth = width - margin.left - margin.right;
+            const graphHeight = height - margin.top - margin.bottom;
+        
+            const svg = d3.select("#graph")
+                .append("svg")
+                .attr("viewBox", [0, 0, width, height])
+                .attr("width", width)
+                .attr("height", height);
+        
+            const g = svg.append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+        
+            const simulation = d3.forceSimulation(graph.nodes)
+                .force("link", d3.forceLink(graph.links).id(d => d.id))
+                .force("charge", d3.forceManyBody().strength(-30))
+                .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2))
+                .stop();
+        
+            // Run the simulation synchronously
+            for (let i = 0; i < 300; ++i) simulation.tick();
+        
+            // Calculate the bounds of the graph
+            const xExtent = d3.extent(graph.nodes, d => d.x);
+            const yExtent = d3.extent(graph.nodes, d => d.y);
+        
+            // Create scales to map the graph to the SVG area
+            const xScale = d3.scaleLinear().domain(xExtent).range([0, graphWidth]);
+            const yScale = d3.scaleLinear().domain(yExtent).range([0, graphHeight]);
+        
+            // Draw links
+            g.selectAll("line")
+                .data(graph.links)
+                .join("line")
+                .attr("stroke", "#999")
+                .attr("stroke-opacity", 0.15)
+                .attr("x1", d => xScale(d.source.x))
+                .attr("y1", d => yScale(d.source.y))
+                .attr("x2", d => xScale(d.target.x))
+                .attr("y2", d => yScale(d.target.y));
+        
+            // Draw nodes
+            g.selectAll("circle")
+                .data(graph.nodes)
+                .join("circle")
+                .attr("r", 5)
+                .attr("fill", "#60168a")
+                .attr("cx", d => xScale(d.x))
+                .attr("cy", d => yScale(d.y));
+        }
+        
+        function calculateConcentrationProbability(n, p) {
+            const d = (n - 1) * p;
+            if (d < C * Math.log(n)) {
+                return "Graph not dense enough for approximation";
+            }
+            
+            const lowerBound = Math.floor(0.9 * d);
+            const upperBound = Math.ceil(1.1 * d);
+            
+            let prob = 0;
+            for (let k = lowerBound; k <= upperBound; k++) {
+                prob += math.combinations(n - 1, k) * Math.pow(p, k) * Math.pow(1 - p, n - 1 - k);
+            }
+            
+            return prob;
+        }
+                
+        function drawDistribution(graph, n, p) {
+            d3.select("#distribution").selectAll("*").remove();
+        
+            const margin = {top: 40, right: 40, bottom: 60, left: 60};
+            const graphWidth = width - margin.left - margin.right;
+            const graphHeight = height - margin.top - margin.bottom;
+        
+            const svg = d3.select("#distribution")
+                .append("svg")
+                .attr("viewBox", [0, 0, width, height])
+                .attr("width", width)
+                .attr("height", height);
+        
+            const g = svg.append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+        
+            const expectedDegree = (n - 1) * p;
+            const lowerBound = 0.9 * expectedDegree;
+            const upperBound = 1.1 * expectedDegree;
+        
+            const degreeCount = new Array(n).fill(0);
+            graph.links.forEach(link => {
+                degreeCount[link.source.id]++;
+                degreeCount[link.target.id]++;
+            });
+        
+            // Set x-axis domain based on degree count
+            minDeg = Math.floor(Math.min(...degreeCount));
+            maxDeg = Math.floor(Math.max(...degreeCount));
+            const x = d3.scaleLinear()
+                .domain([minDeg-5, maxDeg+5])
+                .range([0, graphWidth]);
+        
+            const histogram = d3.histogram()
+                .domain(x.domain())
+                .thresholds(x.ticks(n));
+        
+            const bins = histogram(degreeCount);
+        
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(bins, d => d.length) / n])
+                .range([graphHeight, 0]);
+        
+            // Draw axes
+            g.append("g")
+                .attr("transform", `translate(0,${graphHeight})`)
+                .call(d3.axisBottom(x));
+        
+            g.append("g")
+                .call(d3.axisLeft(y).ticks(5).tickFormat(d3.format(".0%")));
+
+            // Draw histogram bars
+            g.selectAll("rect")
+                .data(bins)
+                .join("rect")
+                .attr("x", d => x(d.x0) + 1)
+                .attr("width", d => Math.max(0, x(d.x1) - x(d.x0) - 1))
+                .attr("y", d => y(d.length / n))
+                .attr("height", d => y(0) - y(d.length / n))
+                .attr("fill", "#60168a");
+        
+            // Add red dotted line for expected degree
+            g.append("line")
+                .attr("x1", x(expectedDegree))
+                .attr("x2", x(expectedDegree))
+                .attr("y1", 0)
+                .attr("y2", graphHeight)
+                .attr("stroke", "red")
+                .attr("stroke-dasharray", "5,5");
+
+        
+            // Calculate binomial distribution
+            const binomialPMF = (k) => {
+                if (k > n - 1) return 0;
+                return math.combinations(n - 1, k) * Math.pow(p, k) * Math.pow(1 - p, n - 1 - k);
+            };
+            const curveData = d3.range(minDeg-5, maxDeg+5).map(k => [k, binomialPMF(k)]);
+        
+            // Scale the binomial distribution to match the histogram scale
+            const maxBinomialProb = d3.max(curveData, d => d[1]);
+            const scaleFactor = (y.domain()[1] * n/2) / maxBinomialProb;
+
+            // Create area generator
+            const area = d3.area()
+                .x(d => x(d[0]))
+                .y0(graphHeight)
+                .y1(d => y(d[1] * scaleFactor / n));
+
+
+            // Add shaded area for 0.9d to 1.1d range
+            g.append("path")
+                .datum(curveData.filter(d => d[0] >= lowerBound && d[0] <= upperBound))
+                .attr("fill", "yellow")
+                .attr("fill-opacity", 0.3)
+                .attr("d", area);
+
+            // Add theoretical distribution curve
+            g.append("path")
+            .datum(curveData)
+            .attr("fill", "none")
+            .attr("stroke", "purple")
+            .attr("stroke-width", 2)
+            .attr("d", d3.line()
+                .x(d => x(d[0]))
+                .y(d => y(d[1] * scaleFactor / n))
+            );
+                        
+            // Add labels
+            svg.append("text")
+                .attr("x", width / 2)
+                .attr("y", height - 10)
+                .attr("text-anchor", "middle")
+                .text("Degree");
+        
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("x", -height / 2)
+                .attr("y", 15)
+                .attr("text-anchor", "middle")
+                .text("Proportion of Vertices");
+        
+            // Add title
+            svg.append("text")
+                .attr("x", width / 2)
+                .attr("y", 20)
+                .attr("text-anchor", "middle")
+                .attr("font-weight", "bold")
+                .text(`Expected Degree: ${expectedDegree.toFixed(2)}`);
+        
+            // Calculate and display concentration probability
+            const concentrationProb = calculateConcentrationProbability(n, p);
+            const inRangeCount = degreeCount.filter(d => d >= lowerBound && d <= upperBound).length;
+            const actualProportion = inRangeCount / n;
+            svg.append("text")
+                .attr("x", width / 2)
+                .attr("y", height - 30)
+                .attr("text-anchor", "middle")
+                .attr("font-size", "12px")
+                .text(`Theoretical prob for a single vertex: ${(typeof concentrationProb === 'number' ? (concentrationProb * 100).toFixed(2) + '%' : concentrationProb)}; Observed proportion of vertices in this graph: ${(actualProportion * 100).toFixed(2)}%`);
+        }
+                
+        function generate() {
+            const n = parseInt(document.getElementById("n").value);
+            const p = parseFloat(document.getElementById("p").value);
+            const graph = generateGraph(n, p);
+            drawGraph(graph);
+            drawDistribution(graph, n, p);
+        }
+        
+        document.getElementById("generate").addEventListener("click", generate);
+        
+        // Debounce function to limit the rate of function calls
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Use debounced version of generate for C slider
+        const debouncedGenerate = debounce(generate, 300);
+        document.getElementById("C").addEventListener("input", debouncedGenerate);
+        
+        updatePSlider();
+        generate();
+    </script>
+</body>
+</html>
+
