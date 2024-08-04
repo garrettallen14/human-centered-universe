@@ -15,59 +15,62 @@
         #graph, #distribution {
             width: 100%;
             height: 400px;
+            padding-bottom: 0%; /* Maintain 2:1 aspect ratio */
             border: 1px solid #ddd;
-            margin-bottom: 20px;
+            margin-bottom: 1rem;
         }
         button {
             background-color: #60168a;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 0.625rem 1.25rem;
             cursor: pointer;
-            font-size: 16px;
-            margin-bottom: 20px;
+            font-size: 1rem;
+            margin-bottom: 1.25rem;
         }
         button:hover {
             background-color: #4a1269;
         }
         input {
-            margin-right: 10px;
-            padding: 5px;
+            margin-right: 0.625rem;
+            padding: 0.3125rem;
         }
         .math {
             font-family: "Times New Roman", Times, serif;
             font-style: italic;
         }
         .proof-step {
-            margin-bottom: 10px;
-            padding: 1px 10px; /* Reduced vertical padding */
+            margin-bottom: 0.625rem;
+            padding: 0.0625rem 0.625rem;
             background-color: #f9f9f9;
-            border-left: 5px solid #60168a;
+            border-left: 0.3125rem solid #60168a;
         }
         
         .slider-container {
             display: flex;
-            align-items: center;
-            margin-bottom: 10px;
+            flex-direction: column;
+            align-items: stretch;
+            margin-bottom: 0.625rem;
         }
         .slider-container label {
-            width: 200px;
+            width: 100%;
+            margin-bottom: 0.3125rem;
         }
         .slider-container input {
-            flex-grow: 1;
+            width: 100%;
         }
         .slider-value {
-            width: 50px;
+            width: 3.125rem;
             text-align: right;
-            margin-left: 10px;
+            margin-left: 0.625rem;
         }
         input[type="range"] {
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
             width: 75%;
-            height: 15px;
-            border-radius: 5px;
+            height: 0.9375rem;
+            border-radius: 0.3125rem;
             background: #d3d3d3;
             outline: none;
             opacity: 0.7;
@@ -77,16 +80,16 @@
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 25px;
-            height: 25px;
+            width: 1.5625rem;
+            height: 1.5625rem;
             border-radius: 50%;
             background: #60168a;
             cursor: pointer;
         }
 
         input[type="range"]::-moz-range-thumb {
-            width: 25px;
-            height: 25px;
+            width: 1.5625rem;
+            height: 1.5625rem;
             border-radius: 50%;
             background: #60168a;
             cursor: pointer;
@@ -99,9 +102,19 @@
         #density-warning {
             color: red;
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: 0.625rem;
         }
 
+        @media (min-width: 768px) {
+            .slider-container {
+                flex-direction: row;
+                align-items: center;
+            }
+            .slider-container label {
+                width: 12.5rem;
+                margin-bottom: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -112,7 +125,6 @@
         <nav>
             <a href="index.html">Home</a>
             <a href="about.html">About</a>
-            <a href="bookshelf.html">Bookshelf</a>
         </nav>
         <main id="content">
             <article class="full-article">
@@ -122,18 +134,13 @@
                 <section id="visualization">
                     <h3>Visualization</h3>
                     <div class="slider-container">
-                        <label for="C">Constant C:</label>
-                        <input type="range" id="C" min="1" max="20" value="10">
-                        <span id="C-value" class="slider-value">10</span>
-                    </div>
-                    <div class="slider-container">
                         <label for="n">Number of vertices (n):</label>
                         <input type="range" id="n" min="40" max="200" value="100">
                         <span id="n-value" class="slider-value">100</span>
                     </div>
                     <div class="slider-container">
                         <label for="p">Edge probability (p):</label>
-                        <input type="range" id="p" min="0" max="1" step="0.01" value="0.75">
+                        <input type="range" id="p" min="0.4" max="1" step="0.01" value="0.75">
                         <span id="p-value" class="slider-value">0.75</span>
                     </div>
                     <div id="density-warning"></div>
@@ -150,7 +157,7 @@
                 <section id="article-body">
                     <h2>Introduction</h2>
                 
-                    <p>Inspired by <a href="https://x.com/tszzl/status/1817636331767661014" style="text-decoration: dotted-underline; color: black;">some</a> <a href="https://x.com/tszzl/status/1817108910299291712" style="text-decoration: dotted-underline; color: black;">recent</a> <a href="https://x.com/tszzl/status/1817081479190708528" style="text-decoration: dotted-underline; color: black;">roon</a> <a href="https://x.com/_deepfates/status/1817798524148609486" style="text-decoration: dotted-underline; color: black;">tweets</a> , I have begun studying <a href="https://www.math.uci.edu/~rvershyn/papers/HDP-book/HDP-book.html" style="text-decoration: dotted-underline; color: black;">"High-Dimensional Probability"</a> by Roman Vershynin to gain a deeper intuition about higher-dimensional spaces. I encountered a cool proof which I wanted to visualize, so I decided to make a blog post showcasing the graphs and what I learned. The result provides some insights into the structure of large, complex networks. This is not really a machine learning oriented result, but still thought I would share.</p>
+                    <p>Inspired by <a href="https://x.com/tszzl/status/1817636331767661014" style="text-decoration: dotted-underline; color: black;">some</a> <a href="https://x.com/tszzl/status/1817108910299291712" style="text-decoration: dotted-underline; color: black;">recent</a> <a href="https://x.com/tszzl/status/1817081479190708528" style="text-decoration: dotted-underline; color: black;">roon</a> <a href="https://x.com/_deepfates/status/1817798524148609486" style="text-decoration: dotted-underline; color: black;">tweets</a> , I have begun reading <a href="https://www.math.uci.edu/~rvershyn/papers/HDP-book/HDP-book.html" style="text-decoration: dotted-underline; color: black;">"High-Dimensional Probability"</a> by Roman Vershynin to gain a deeper intuition about higher-dimensional spaces. I encountered a cool proof which I wanted to visualize, so I decided to make a blog post showcasing the graphs and what I learned. The result provides some insights into the structure of large, complex networks. This is not really a machine learning oriented result, but still thought I would share.</p>
 
                     <h2>The Erdős-Rényi Model</h2>
                 
@@ -206,7 +213,7 @@
                 
                     <h2>Implications and Further Thoughts</h2>
 
-                    <p>I wasn't quite sure where exactly this is applied, so I got Claude to generate some ways this proof is applied in real life. I will leave you with these:</p>
+                    <p>I got Claude to generate some ways this proof is applied in real life. I will leave you with these:</p>
                 
                     <ol>
                         <li><strong>Network Analysis:</strong> This result suggests that in large, dense networks, we might expect to see a remarkably uniform degree distribution. Significant deviations from this could indicate non-random structure in real-world networks.</li>
@@ -218,30 +225,46 @@
         </main>
     </div>
     <script>
-        const width = 800;
-        const height = 400;
-        let C = 10; // Initial value for C
+        // Web Worker for graph layout
+        const workerCode = `
+            importScripts('https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js');
+            
+            onmessage = function(e) {
+                const {nodes, links} = e.data;
+                const simulation = d3.forceSimulation(nodes)
+                    .force("link", d3.forceLink(links).id(d => d.id))
+                    .force("charge", d3.forceManyBody().strength(-30))
+                    .force("center", d3.forceCenter(0, 0))
+                    .stop();
+
+                for (let i = 0; i < 300; ++i) simulation.tick();
+                
+                postMessage({nodes, links});
+            };
+        `;
+
+        const workerBlob = new Blob([workerCode], {type: "application/javascript"});
+        const workerUrl = URL.createObjectURL(workerBlob);
+        const worker = new Worker(workerUrl);
+
+        let width, height;
+        const C = 10; // Constant C
         
-        function updateCSlider() {
-            C = parseInt(document.getElementById("C").value);
-            document.getElementById("C-value").textContent = C;
-            updatePSlider();
+        function updateDimensions() {
+            const graphContainer = document.getElementById("graph");
+            width = graphContainer.clientWidth;
+            height = 400; // Set a fixed height
+            
+            // Update SVG dimensions
+            d3.select("#graph svg")
+                .attr("width", width)
+                .attr("height", height);
+            
+            d3.select("#distribution svg")
+                .attr("width", width)
+                .attr("height", height);
         }
 
-        function updatePSlider() {
-            const n = parseInt(document.getElementById("n").value);
-            const pSlider = document.getElementById("p");
-            const minP = (C * Math.log(n)) / (n - 1);
-            pSlider.min = minP.toFixed(4);
-            pSlider.max = "1";
-            pSlider.step = Math.max(0.0001, (1 - minP) / 100).toFixed(4);
-            if (parseFloat(pSlider.value) < minP) {
-                pSlider.value = minP.toFixed(4);
-            }
-            document.getElementById("p-value").textContent = pSlider.value;
-            checkDensityCondition();
-        }
-        
         function checkDensityCondition() {
             const n = parseInt(document.getElementById("n").value);
             const p = parseFloat(document.getElementById("p").value);
@@ -255,9 +278,18 @@
                 warningElement.textContent = "";
             }
         }
-
-        document.getElementById("C").addEventListener("input", updateCSlider);
         
+        // Efficient binomial coefficient calculation
+        function binomialCoeff(n, k) {
+            if (k === 0 || k === n) return 1;
+            if (k > n - k) k = n - k;
+            let result = 1;
+            for (let i = 1; i <= k; i++) {
+                result *= (n - (k - i));
+                result /= i;
+            }
+            return result;
+        }
         document.getElementById("n").addEventListener("input", function() {
             document.getElementById("n-value").textContent = this.value;
             updatePSlider();
@@ -269,74 +301,74 @@
             checkDensityCondition();
             generate();
         });
-        
+                
         function generateGraph(n, p) {
-            const nodes = Array.from({length: n}, (_, i) => ({id: i}));
+            const nodes = Array.from({length: n}, (_, i) => ({id: i, degree: 0}));
             const links = [];
             for (let i = 0; i < n; i++) {
                 for (let j = i + 1; j < n; j++) {
                     if (Math.random() < p) {
                         links.push({source: i, target: j});
+                        nodes[i].degree++;
+                        nodes[j].degree++;
                     }
                 }
             }
             return {nodes, links};
         }
-        
+                
         function drawGraph(graph) {
             d3.select("#graph").selectAll("*").remove();
-        
-            const margin = {top: 20, right: 75, bottom: 20, left: 50};
+    
+            updateDimensions();
+            const margin = {top: 20, right: 20, bottom: 20, left: 40};
             const graphWidth = width - margin.left - margin.right;
             const graphHeight = height - margin.top - margin.bottom;
-        
+    
             const svg = d3.select("#graph")
                 .append("svg")
-                .attr("viewBox", [0, 0, width, height])
                 .attr("width", width)
                 .attr("height", height);
-        
+    
             const g = svg.append("g")
                 .attr("transform", `translate(${margin.left},${margin.top})`);
-        
-            const simulation = d3.forceSimulation(graph.nodes)
-                .force("link", d3.forceLink(graph.links).id(d => d.id))
-                .force("charge", d3.forceManyBody().strength(-30))
-                .force("center", d3.forceCenter(graphWidth / 2, graphHeight / 2))
-                .stop();
-        
-            // Run the simulation synchronously
-            for (let i = 0; i < 300; ++i) simulation.tick();
-        
-            // Calculate the bounds of the graph
-            const xExtent = d3.extent(graph.nodes, d => d.x);
-            const yExtent = d3.extent(graph.nodes, d => d.y);
-        
-            // Create scales to map the graph to the SVG area
-            const xScale = d3.scaleLinear().domain(xExtent).range([0, graphWidth]);
-            const yScale = d3.scaleLinear().domain(yExtent).range([0, graphHeight]);
-        
-            // Draw links
-            g.selectAll("line")
-                .data(graph.links)
-                .join("line")
-                .attr("stroke", "#999")
-                .attr("stroke-opacity", 0.15)
-                .attr("x1", d => xScale(d.source.x))
-                .attr("y1", d => yScale(d.source.y))
-                .attr("x2", d => xScale(d.target.x))
-                .attr("y2", d => yScale(d.target.y));
-        
-            // Draw nodes
-            g.selectAll("circle")
-                .data(graph.nodes)
-                .join("circle")
-                .attr("r", 5)
-                .attr("fill", "#60168a")
-                .attr("cx", d => xScale(d.x))
-                .attr("cy", d => yScale(d.y));
+    
+            worker.onmessage = function(e) {
+                const {nodes, links} = e.data;
+    
+                // Calculate the bounds of the graph
+                const xExtent = d3.extent(nodes, d => d.x);
+                const yExtent = d3.extent(nodes, d => d.y);
+    
+                // Create scales to map the graph to the SVG area
+                const xScale = d3.scaleLinear().domain(xExtent).range([0, graphWidth]);
+                const yScale = d3.scaleLinear().domain(yExtent).range([0, graphHeight]);
+    
+                // Draw links
+                g.selectAll("line")
+                    .data(links)
+                    .join("line")
+                    .attr("stroke", "#999")
+                    .attr("stroke-opacity", 0.15)
+                    .attr("x1", d => xScale(d.source.x))
+                    .attr("y1", d => yScale(d.source.y))
+                    .attr("x2", d => xScale(d.target.x))
+                    .attr("y2", d => yScale(d.target.y));
+    
+                // Draw nodes
+                g.selectAll("circle")
+                    .data(nodes)
+                    .join("circle")
+                    .attr("r", Math.min(5, width / 160))
+                    .attr("fill", "#60168a")
+                    .attr("cx", d => xScale(d.x))
+                    .attr("cy", d => yScale(d.y));
+            };
+    
+            worker.postMessage(graph);
         }
-        
+            
+        // Updated probability calculation
         function calculateConcentrationProbability(n, p) {
             const d = (n - 1) * p;
             if (d < C * Math.log(n)) {
@@ -346,24 +378,61 @@
             const lowerBound = Math.floor(0.9 * d);
             const upperBound = Math.ceil(1.1 * d);
             
-            let prob = 0;
-            for (let k = lowerBound; k <= upperBound; k++) {
-                prob += math.combinations(n - 1, k) * Math.pow(p, k) * Math.pow(1 - p, n - 1 - k);
+            let outsideRangeProb = 0;
+            for (let k = 0; k < lowerBound; k++) {
+                outsideRangeProb += binomialCoeff(n - 1, k) * Math.pow(p, k) * Math.pow(1 - p, n - 1 - k);
+            }
+            for (let k = upperBound + 1; k <= n - 1; k++) {
+                outsideRangeProb += binomialCoeff(n - 1, k) * Math.pow(p, k) * Math.pow(1 - p, n - 1 - k);
             }
             
-            return prob;
+            // Probability for all vertices being within range
+            return Math.pow(1 - outsideRangeProb, n);
         }
-                
+
+        function generateGraph(n, p) {
+            const nodes = Array.from({length: n}, (_, i) => ({id: i, degree: 0}));
+            const links = [];
+            for (let i = 0; i < n; i++) {
+                for (let j = i + 1; j < n; j++) {
+                    if (Math.random() < p) {
+                        links.push({source: i, target: j});
+                        nodes[i].degree++;
+                        nodes[j].degree++;
+                    }
+                }
+            }
+            return {nodes, links};
+        }
+
+        function calculateConcentrationProbability(n, p) {
+            const d = (n - 1) * p;
+            if (d < C * Math.log(n)) {
+                return "Graph not dense enough for approximation";
+            }
+            
+            const lowerBound = Math.floor(0.9 * d);
+            const upperBound = Math.ceil(1.1 * d);
+            
+            let singleVertexProb = 0;
+            for (let k = lowerBound; k <= upperBound; k++) {
+                singleVertexProb += binomialCoeff(n - 1, k) * Math.pow(p, k) * Math.pow(1 - p, n - 1 - k);
+            }
+            
+            // Probability for all vertices
+            return Math.pow(singleVertexProb, n);
+        }
+
         function drawDistribution(graph, n, p) {
             d3.select("#distribution").selectAll("*").remove();
         
-            const margin = {top: 40, right: 40, bottom: 60, left: 60};
+            updateDimensions();
+            const margin = {top: 40, right: 20, bottom: 60, left: 60};
             const graphWidth = width - margin.left - margin.right;
             const graphHeight = height - margin.top - margin.bottom;
         
             const svg = d3.select("#distribution")
                 .append("svg")
-                .attr("viewBox", [0, 0, width, height])
                 .attr("width", width)
                 .attr("height", height);
         
@@ -371,44 +440,59 @@
                 .attr("transform", `translate(${margin.left},${margin.top})`);
         
             const expectedDegree = (n - 1) * p;
-            const lowerBound = 0.9 * expectedDegree;
-            const upperBound = 1.1 * expectedDegree;
+            const degreeExtent = d3.extent(graph.nodes, d => d.degree);
+            const lowerBound = Math.max(0, Math.min(degreeExtent[0], Math.floor(0.5 * expectedDegree)));
+            const upperBound = Math.min(n - 1, Math.max(degreeExtent[1], Math.ceil(1.5 * expectedDegree)));
         
-            const degreeCount = new Array(n).fill(0);
-            graph.links.forEach(link => {
-                degreeCount[link.source.id]++;
-                degreeCount[link.target.id]++;
-            });
-        
-            // Set x-axis domain based on degree count
-            minDeg = Math.floor(Math.min(...degreeCount));
-            maxDeg = Math.floor(Math.max(...degreeCount));
             const x = d3.scaleLinear()
-                .domain([minDeg-5, maxDeg+5])
+                .domain([lowerBound, upperBound])
                 .range([0, graphWidth]);
         
             const histogram = d3.histogram()
                 .domain(x.domain())
-                .thresholds(x.ticks(n));
+                .thresholds(x.ticks(Math.min(upperBound - lowerBound + 1, 50)));
         
-            const bins = histogram(degreeCount);
+            const bins = histogram(graph.nodes.map(d => d.degree));
+        
+            // Calculate binomial distribution
+            function binomialPMF(n, p, k) {
+                if (k < 0 || k > n) return 0;
+                return binomialCoeff(n, k) * Math.pow(p, k) * Math.pow(1 - p, n - k);
+            }
+        
+            const curveData = d3.range(lowerBound, upperBound + 1).map(k => [k, binomialPMF(n - 1, p, k)]);
+            const maxBinomialProb = d3.max(curveData, d => d[1]);
+            const maxHistogramFreq = d3.max(bins, d => d.length / n);
+            const normalizedCurveData = curveData.map(d => [d[0], (d[1] / maxBinomialProb) * maxHistogramFreq]);
         
             const y = d3.scaleLinear()
-                .domain([0, d3.max(bins, d => d.length) / n])
+                .domain([0, Math.max(d3.max(bins, d => d.length / n), maxHistogramFreq)])
                 .range([graphHeight, 0]);
         
             // Draw axes
             g.append("g")
                 .attr("transform", `translate(0,${graphHeight})`)
-                .call(d3.axisBottom(x));
+                .call(d3.axisBottom(x).ticks(Math.min(upperBound - lowerBound + 1, 10)));
         
             g.append("g")
                 .call(d3.axisLeft(y).ticks(5).tickFormat(d3.format(".0%")));
-
+        
+            // Draw yellow rectangle for 0.9d to 1.1d range
+            const lowerRangeBound = 0.9 * expectedDegree;
+            const upperRangeBound = 1.1 * expectedDegree;
+            g.append("rect")
+                .attr("x", x(lowerRangeBound))
+                .attr("y", 0)
+                .attr("width", x(upperRangeBound) - x(lowerRangeBound))
+                .attr("height", graphHeight)
+                .attr("fill", "yellow")
+                .attr("opacity", 0.3);
+        
             // Draw histogram bars
-            g.selectAll("rect")
+            g.selectAll("rect.histogram-bar")
                 .data(bins)
                 .join("rect")
+                .attr("class", "histogram-bar")
                 .attr("x", d => x(d.x0) + 1)
                 .attr("width", d => Math.max(0, x(d.x1) - x(d.x0) - 1))
                 .attr("y", d => y(d.length / n))
@@ -423,88 +507,77 @@
                 .attr("y2", graphHeight)
                 .attr("stroke", "red")
                 .attr("stroke-dasharray", "5,5");
-
         
-            // Calculate binomial distribution
-            const binomialPMF = (k) => {
-                if (k > n - 1) return 0;
-                return math.combinations(n - 1, k) * Math.pow(p, k) * Math.pow(1 - p, n - 1 - k);
-            };
-            const curveData = d3.range(minDeg-5, maxDeg+5).map(k => [k, binomialPMF(k)]);
+            // Draw theoretical distribution curve
+            g.append("path")
+                .datum(normalizedCurveData)
+                .attr("fill", "none")
+                .attr("stroke", "purple")
+                .attr("stroke-width", 2)
+                .attr("d", d3.line()
+                    .x(d => x(d[0]))
+                    .y(d => y(d[1]))
+                );
         
-            // Scale the binomial distribution to match the histogram scale
-            const maxBinomialProb = d3.max(curveData, d => d[1]);
-            const scaleFactor = (y.domain()[1] * n/2) / maxBinomialProb;
-
-            // Create area generator
-            const area = d3.area()
-                .x(d => x(d[0]))
-                .y0(graphHeight)
-                .y1(d => y(d[1] * scaleFactor / n));
-
-
-            // Add shaded area for 0.9d to 1.1d range
-            g.append("path")
-                .datum(curveData.filter(d => d[0] >= lowerBound && d[0] <= upperBound))
-                .attr("fill", "yellow")
-                .attr("fill-opacity", 0.3)
-                .attr("d", area);
-
-            // Add theoretical distribution curve
-            g.append("path")
-            .datum(curveData)
-            .attr("fill", "none")
-            .attr("stroke", "purple")
-            .attr("stroke-width", 2)
-            .attr("d", d3.line()
-                .x(d => x(d[0]))
-                .y(d => y(d[1] * scaleFactor / n))
-            );
-                        
-            // Add labels
+            // Add labels and title
             svg.append("text")
                 .attr("x", width / 2)
-                .attr("y", height - 10)
+                .attr("y", height - margin.bottom / 3 - 5)
                 .attr("text-anchor", "middle")
+                .attr("font-size", `${Math.max(10, width / 60)}px`)
                 .text("Degree");
         
             svg.append("text")
                 .attr("transform", "rotate(-90)")
                 .attr("x", -height / 2)
-                .attr("y", 15)
+                .attr("y", margin.left / 3)
                 .attr("text-anchor", "middle")
+                .attr("font-size", `${Math.max(12, width / 50)}px`)
                 .text("Proportion of Vertices");
         
-            // Add title
             svg.append("text")
                 .attr("x", width / 2)
-                .attr("y", 20)
+                .attr("y", margin.top / 2)
                 .attr("text-anchor", "middle")
                 .attr("font-weight", "bold")
+                .attr("font-size", `${Math.max(14, width / 40)}px`)
                 .text(`Expected Degree: ${expectedDegree.toFixed(2)}`);
         
             // Calculate and display concentration probability
             const concentrationProb = calculateConcentrationProbability(n, p);
-            const inRangeCount = degreeCount.filter(d => d >= lowerBound && d <= upperBound).length;
+            const inRangeCount = graph.nodes.filter(d => d.degree >= lowerRangeBound && d.degree <= upperRangeBound).length;
             const actualProportion = inRangeCount / n;
             svg.append("text")
                 .attr("x", width / 2)
-                .attr("y", height - 30)
+                .attr("y", height - margin.bottom / 6)
                 .attr("text-anchor", "middle")
-                .attr("font-size", "12px")
-                .text(`Theoretical prob for a single vertex: ${(typeof concentrationProb === 'number' ? (concentrationProb * 100).toFixed(2) + '%' : concentrationProb)}; Observed proportion of vertices in this graph: ${(actualProportion * 100).toFixed(2)}%`);
+                .attr("font-size", `${Math.max(10, width / 80)}px`)
+                .text(`Probability that ALL vertices fall between 0.9d and 1.1d: ${(typeof concentrationProb === 'number' ? (concentrationProb * 100).toFixed(4) + '%' : concentrationProb)}; Observed % of vertices between 0.9d and 1.1d: ${(actualProportion * 100).toFixed(2)}%`);
         }
-                
+                                
         function generate() {
             const n = parseInt(document.getElementById("n").value);
             const p = parseFloat(document.getElementById("p").value);
             const graph = generateGraph(n, p);
             drawGraph(graph);
             drawDistribution(graph, n, p);
+            checkDensityCondition();
         }
+    
+        document.getElementById("n").addEventListener("input", function() {
+            document.getElementById("n-value").textContent = this.value;
+            checkDensityCondition();
+            generate();
+        });
         
+        document.getElementById("p").addEventListener("input", function() {
+            document.getElementById("p-value").textContent = this.value;
+            checkDensityCondition();
+            generate();
+        });
+    
         document.getElementById("generate").addEventListener("click", generate);
-        
+            
         // Debounce function to limit the rate of function calls
         function debounce(func, wait) {
             let timeout;
@@ -520,11 +593,16 @@
 
         // Use debounced version of generate for C slider
         const debouncedGenerate = debounce(generate, 300);
-        document.getElementById("C").addEventListener("input", debouncedGenerate);
         
-        updatePSlider();
+        // Initialize the page
+        updateDimensions();
         generate();
+        
+        // Add resize event listener
+        window.addEventListener("resize", debounce(() => {
+            updateDimensions();
+            generate();
+        }, 250));
     </script>
 </body>
 </html>
-
