@@ -175,3 +175,28 @@ p {
   .popup-content.fixed {
     position: fixed;
   }
+
+  .diagram-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 2em 0;
+}
+
+.neural-diagram {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.8em;
+    line-height: 1.4;
+    white-space: pre;
+    overflow-x: auto;
+    max-width: 100%;
+    background-color: #f5f5f5;
+    padding: 1em;
+    border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+    .neural-diagram {
+        font-size: 0.7em;
+    }
+}
